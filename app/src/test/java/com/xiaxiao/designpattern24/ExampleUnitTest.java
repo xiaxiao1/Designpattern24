@@ -7,6 +7,11 @@ import com.xiaxiao.designpattern24.adapter.AdapterUser;
 import com.xiaxiao.designpattern24.adapter.Client4UserInterface;
 import com.xiaxiao.designpattern24.adapter.UserImpl;
 import com.xiaxiao.designpattern24.adapter.UserInterface;
+import com.xiaxiao.designpattern24.builder.BengBengCarBuilder;
+import com.xiaxiao.designpattern24.builder.interfaces.CarBuilder;
+import com.xiaxiao.designpattern24.builder.interfaces.CarModel;
+import com.xiaxiao.designpattern24.builder.Director;
+import com.xiaxiao.designpattern24.builder.KartCarBuilder;
 import com.xiaxiao.designpattern24.decorator.ColorHairDecorator;
 import com.xiaxiao.designpattern24.decorator.Girl;
 import com.xiaxiao.designpattern24.decorator.LongHairDecorator;
@@ -43,8 +48,6 @@ import com.xiaxiao.designpattern24.util.DPUtil;
 
 import org.junit.Test;
 
-import java.lang.reflect.InvocationHandler;
-
 import static org.junit.Assert.*;
 
 /**
@@ -68,7 +71,9 @@ public class ExampleUnitTest {
 //        AbstractFactoryTest();
 //        FacadeTest();
 //        AdapterTest();
-        TemplateMethodTest();
+//        TemplateMethodTest();
+//        BuilderTest1();
+        BuilderTest2();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
         test.Ha();*/
     }
@@ -197,6 +202,48 @@ public class ExampleUnitTest {
 
         AbstractCar benz = new Benz();
         benz.run();
+    }
+
+    public void BuilderTest1() {
+        CarBuilder bengbengCarBuilder = new BengBengCarBuilder();
+        bengbengCarBuilder
+                .prepareACarmodel()
+                .alarm()
+                .stop()
+                .start()
+                .setOrder()
+                .getCarModel()
+                .run();
+        CarBuilder kartCarBuilder = new KartCarBuilder();
+        kartCarBuilder
+                .prepareACarmodel()
+                .stop()
+                .alarm()
+                .start()
+                .setOrder()
+                .getCarModel()
+                .run();
+    }
+
+    public void BuilderTest2() {
+        Director carDirector = new Director();
+        CarModel bengbeng1 = carDirector.getATypeBengbeng();
+        CarModel bengbeng2 = carDirector.getBTypeBengbeng();
+        CarModel kart1 = carDirector.getCTypeKart();
+        CarModel kart2 = carDirector.getDTypeKart();
+
+        bengbeng1.run();
+        DPUtil.print("--------------------------------------------\n");
+        bengbeng2.run();
+        DPUtil.print("--------------------------------------------\n");
+
+        kart1.run();
+        DPUtil.print("--------------------------------------------\n");
+        kart2.run();
+
+        //如果按照设计模式之禅上的写法，上面生成的四个carmodel,
+        //bengbeng1==bengbeng2,,,,,kart1==kart2,,
+        //按照上下文理解，这应该是不对的吧
     }
 
 
