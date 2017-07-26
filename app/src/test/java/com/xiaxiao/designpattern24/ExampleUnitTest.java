@@ -7,11 +7,25 @@ import com.xiaxiao.designpattern24.adapter.AdapterUser;
 import com.xiaxiao.designpattern24.adapter.Client4UserInterface;
 import com.xiaxiao.designpattern24.adapter.UserImpl;
 import com.xiaxiao.designpattern24.adapter.UserInterface;
+import com.xiaxiao.designpattern24.bridge.Clothes;
+import com.xiaxiao.designpattern24.bridge.House;
+import com.xiaxiao.designpattern24.bridge.HouseCrop;
+import com.xiaxiao.designpattern24.bridge.ShanZhaiCrop;
+import com.xiaxiao.designpattern24.bridge.interfaces.Crop;
+import com.xiaxiao.designpattern24.bridge.interfaces.Product;
 import com.xiaxiao.designpattern24.builder.BengBengCarBuilder;
 import com.xiaxiao.designpattern24.builder.interfaces.CarBuilder;
 import com.xiaxiao.designpattern24.builder.interfaces.CarModel;
 import com.xiaxiao.designpattern24.builder.Director;
 import com.xiaxiao.designpattern24.builder.KartCarBuilder;
+import com.xiaxiao.designpattern24.command.Invoker;
+import com.xiaxiao.designpattern24.command.bean.ProjectManager;
+import com.xiaxiao.designpattern24.command.bean.Staff;
+import com.xiaxiao.designpattern24.command.bean.UI;
+import com.xiaxiao.designpattern24.command.commands.AbstractCommand;
+import com.xiaxiao.designpattern24.command.commands.AddUICommand;
+import com.xiaxiao.designpattern24.command.commands.ManagerCommand;
+import com.xiaxiao.designpattern24.command.commands.ProgrammerCommand;
 import com.xiaxiao.designpattern24.decorator.ColorHairDecorator;
 import com.xiaxiao.designpattern24.decorator.Girl;
 import com.xiaxiao.designpattern24.decorator.LongHairDecorator;
@@ -73,7 +87,9 @@ public class ExampleUnitTest {
 //        AdapterTest();
 //        TemplateMethodTest();
 //        BuilderTest1();
-        BuilderTest2();
+//        BuilderTest2();
+//        BridgeTest();
+        CommandTest();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
         test.Ha();*/
     }
@@ -244,6 +260,96 @@ public class ExampleUnitTest {
         //如果按照设计模式之禅上的写法，上面生成的四个carmodel,
         //bengbeng1==bengbeng2,,,,,kart1==kart2,,
         //按照上下文理解，这应该是不对的吧
+    }
+
+    public void BridgeTest() {
+        House house = new House();
+        Crop houseCrop = new HouseCrop(house);//所以这就是一个生产房子的公司了
+        Clothes clothes = new Clothes();
+        Crop shanzhaiCrop = new ShanZhaiCrop(clothes);
+        houseCrop.makeMoney();
+        DPUtil.splitLine();
+        shanzhaiCrop.makeMoney();
+
+        //现在山寨公司不想做衣服了，想做汽车：
+        class ShanZhaiCar extends Product {
+            @Override
+            public void beProduced() {
+                DPUtil.print("做好了一辆山寨奔驰，叫笨池");
+            }
+
+            @Override
+            public void beSelled() {
+                DPUtil.print("笨池车卖了");
+            }
+        }
+        ShanZhaiCar car = new ShanZhaiCar();
+        shanzhaiCrop = new ShanZhaiCrop(car);
+        DPUtil.splitLine();
+        shanzhaiCrop.makeMoney();
+
+    }
+
+    public void CommandTest() {
+
+        /*
+        * 下面这种方式，对于高层来说只要发出命令就行，不需要关系到底是谁在执行的。
+        * 但是这里却需要暴露顶层的Staff对象。
+        * 原来是这样的：new AddUICommand(new UI())
+        *
+        * 按法则来说，这里是不能暴露Staff的，所以要这样实现的话，需要在AbastarctCommand中事先内置好所有的员工类对象，以供不同的Command实现类调用
+        *
+        * 也可以有别的实现方式，不需要实现内置好所有的Staff ,
+        * 在每个子类的构造方法中内置一下就好了{@link com.xiaxiao.designpattern24.command.commands.AddUICommand}
+        * */
+        Invoker xiaxiao = new Invoker();
+        AbstractCommand uiCommand = new AddUICommand();
+        xiaxiao.setCommand(uiCommand);
+        xiaxiao.execute();
+        DPUtil.splitLine();
+        AbstractCommand programmerCommand = new ProgrammerCommand();
+        xiaxiao.setCommand(programmerCommand);
+        xiaxiao.execute();
+        DPUtil.splitLine();
+        AbstractCommand managerCommand = new ManagerCommand();
+        xiaxiao.setCommand(managerCommand);
+        xiaxiao.execute();
+
+        /*
+        * gaocengl高层领导有一天发现员工在玩游戏，
+        * 于是给项目经理下达一项新的监督员工的命令
+        * */
+        /*
+        * 这是我自己想的，但是感觉这个模式这么用不太对，监督员工是项目经理的一个新的功能了，应该是另一个岗位了。需要修改的是Staff类吧，
+        * 这里感觉不对，要想在模式中实现的话，应该再实现一个Staff子类，如watchCommand2才应该是对的。
+        * */
+        DPUtil.splitLine();
+        AbstractCommand watchCommand=new AbstractCommand(new ProjectManager()) {
+            @Override
+            protected void execute(Staff receiver) {
+                DPUtil.print("项目经理在监督着大家好好工作");
+                receiver.work();
+            }
+        };
+        xiaxiao.setCommand(watchCommand);
+        xiaxiao.execute();
+        DPUtil.splitLine();
+
+        AbstractCommand watchCommand2=new AbstractCommand(new Staff() {
+            @Override
+            public void work() {
+                DPUtil.print("我是督查员，我在监管员工，看看谁在玩游戏，弄他。");
+            }
+        }) {
+            @Override
+            protected void execute(Staff receiver) {
+                DPUtil.print("为了监督员工好好工作，增设一个新的岗位，督查员");
+                DPUtil.print("督察员开始工作了:");
+                receiver.work();
+            }
+        };
+        xiaxiao.setCommand(watchCommand2);
+        xiaxiao.execute();
     }
 
 

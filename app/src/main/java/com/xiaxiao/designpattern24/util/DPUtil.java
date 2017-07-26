@@ -9,4 +9,8 @@ public class DPUtil {
         System.out.println(mes);
 
     }
+
+    public static void splitLine() {
+        DPUtil.print("---------------------------------------------------------");
+    }
 }
