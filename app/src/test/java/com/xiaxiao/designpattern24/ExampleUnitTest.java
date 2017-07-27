@@ -41,6 +41,8 @@ import com.xiaxiao.designpattern24.factorymethod.YelloHuman;
 import com.xiaxiao.designpattern24.iterator.Project;
 import com.xiaxiao.designpattern24.iterator.interfaces.IProject;
 import com.xiaxiao.designpattern24.iterator.interfaces.IProjectIterator;
+import com.xiaxiao.designpattern24.observer.BF;
+import com.xiaxiao.designpattern24.observer.GF;
 import com.xiaxiao.designpattern24.proxy.dynamic.LoginHandler;
 import com.xiaxiao.designpattern24.proxy.dynamic.UserManager;
 import com.xiaxiao.designpattern24.proxy.dynamic.UserManagerImpl;
@@ -94,7 +96,8 @@ public class ExampleUnitTest {
 //        BuilderTest2();
 //        BridgeTest();
 //        CommandTest();
-        CompositeTest();
+//        CompositeTest();
+        ObserverTest();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
         test.Ha();*/
     }
@@ -416,6 +419,21 @@ public class ExampleUnitTest {
                 DPUtil.splitLine();
             }
         }
+    }
+
+    public void ObserverTest() {
+        BF dabao = new BF();
+        GF qianqian = new GF("倩倩");
+        GF xiaoli = new GF("小丽");
+        GF lingling = new GF("玲玲");
+        dabao.addObserver(qianqian);
+        dabao.addObserver(xiaoli);
+        dabao.addObserver(lingling);
+
+
+        dabao.chat();
+        dabao.funWithgirl();
+        dabao.sleep();
     }
 
 
