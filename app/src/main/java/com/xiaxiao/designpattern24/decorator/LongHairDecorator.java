@@ -12,9 +12,12 @@ public class LongHairDecorator extends GirlHairDecorator {
         super(person);
     }
 
+    public void showLong() {
+        printMes(getName()+"我的头发是很长很长的哦");
+    }
     @Override
     public void showHair() {
-        girl.showHair();
-        printMes("long hair decorator done: "+girl.name+" 的头发长长的");
+        showLong();
+        super.showHair();
     }
 }

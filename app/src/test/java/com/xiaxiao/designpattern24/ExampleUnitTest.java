@@ -26,6 +26,8 @@ import com.xiaxiao.designpattern24.command.commands.AbstractCommand;
 import com.xiaxiao.designpattern24.command.commands.AddUICommand;
 import com.xiaxiao.designpattern24.command.commands.ManagerCommand;
 import com.xiaxiao.designpattern24.command.commands.ProgrammerCommand;
+import com.xiaxiao.designpattern24.composite.LiShiStaff;
+import com.xiaxiao.designpattern24.composite.StaffNodeInterface;
 import com.xiaxiao.designpattern24.decorator.ColorHairDecorator;
 import com.xiaxiao.designpattern24.decorator.Girl;
 import com.xiaxiao.designpattern24.decorator.LongHairDecorator;
@@ -62,6 +64,8 @@ import com.xiaxiao.designpattern24.util.DPUtil;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 /**
@@ -73,7 +77,7 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
-//        decorator(null);
+//        Decorator();
 //        iteratorTest(6);
 //        strategyTest();
 //        proxyTest();
@@ -89,19 +93,25 @@ public class ExampleUnitTest {
 //        BuilderTest1();
 //        BuilderTest2();
 //        BridgeTest();
-        CommandTest();
+//        CommandTest();
+        CompositeTest();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
         test.Ha();*/
     }
 
 
-    public void Decorator(View view) {
+    public void Decorator() {
         Person girl=new Girl("Lucy");
-//        girl.showHair();
+        girl.showHair();
+        DPUtil.splitLine();
+
         girl = new ColorHairDecorator(girl, "红色");
+        girl.showHair();
+        DPUtil.splitLine();
+
         girl = new LongHairDecorator(girl);
         girl.showHair();
-//        HashMap
+
     }
 
 
@@ -352,6 +362,61 @@ public class ExampleUnitTest {
         xiaxiao.execute();
     }
 
+    public void CompositeTest() {
+        LiShiStaff boss = new LiShiStaff("1黑龙", "大boss", "10000");
+
+        LiShiStaff manager1= new LiShiStaff("2张三", "技术部老大", "340000");
+        LiShiStaff manager2= new LiShiStaff("3亚洲舞王赵四", "活动部老大", "10000");
+        LiShiStaff manager3= new LiShiStaff("4王二小", "运营部大哥", "10000");
+
+        LiShiStaff ui= new LiShiStaff("2lucy", "ui射鸡师", "10000");
+        LiShiStaff coder1= new LiShiStaff("2金子", "测试员", "10000");
+        LiShiStaff coder2= new LiShiStaff("2程序猿1号", "代码民工", "10000");
+
+        LiShiStaff lingdui= new LiShiStaff("3铁锤", "领队", "10000");
+        LiShiStaff cat= new LiShiStaff("3猫仔", "打杂的", "10000");
+
+        LiShiStaff dog= new LiShiStaff("4狗蛋", "运营小兵", "10000");
+
+        LiShiStaff xiaomi= new LiShiStaff("1小咪咪", "老大的秘书", "10000");
+
+        boss.addChild(xiaomi);
+        boss.addChild(manager1);
+        boss.addChild(manager2);
+        boss.addChild(manager3);
+
+        manager1.addChild(ui);
+        manager1.addChild(coder1);
+        manager1.addChild(coder2);
+
+        manager2.addChild(lingdui);
+        manager2.addChild(cat);
+
+        manager3.addChild(dog);
+
+        DPUtil.print(boss.getInfo());
+        DPUtil.splitLine();
+
+        ArrayList<StaffNodeInterface> children = boss.getChildren();
+        printCropInfos(children);
+        DPUtil.splitLine();
+        String patentInfo=xiaomi.getParent().getInfo();
+        DPUtil.print(patentInfo);
+        DPUtil.print("老板还要一个小蜜,来咯");
+        xiaomi.getParent().addChild(new LiShiStaff("大眼萌","二秘书","20009"));
+        printCropInfos(boss.getChildren());
+    }
+
+
+    public void printCropInfos(ArrayList<StaffNodeInterface> list) {
+        for (StaffNodeInterface child : list) {
+            DPUtil.print(child.getInfo());
+            if (child.hasChild()) {
+                printCropInfos(child.getChildren());
+                DPUtil.splitLine();
+            }
+        }
+    }
 
 
 

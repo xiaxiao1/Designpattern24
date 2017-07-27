@@ -8,11 +8,11 @@ import com.xiaxiao.designpattern24.decorator.interfaces.Person;
 
 public class Girl extends Person {
     public Girl(String name) {
-        this.name = name;
+        super(name);
     }
 
     @Override
     public void showHair() {
-        printMes(this.name+" 的 头发很漂亮");
+        printMes(getName()+" 的 头发很漂亮");
     }
 }

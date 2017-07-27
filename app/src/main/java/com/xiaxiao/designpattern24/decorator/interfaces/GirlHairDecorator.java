@@ -10,12 +10,12 @@ public abstract  class GirlHairDecorator extends Person {
     protected Person girl;
 
     public GirlHairDecorator(Person girl) {
+        super(girl.getName());
         this.girl = girl;
-        this.name = girl.name;
     }
 
     @Override
     public void showHair() {
-        girl.showHair();
+        this.girl.showHair();
     }
 }

@@ -17,9 +17,13 @@ public class ColorHairDecorator extends GirlHairDecorator {
         this.color = color;
     }
 
+    public void showColor() {
+        printMes(getName()+"我的头发的颜色是"+color);
+    }
+
     @Override
     public void showHair() {
-        girl.showHair();
-        printMes("color hair decorator done: "+girl.name+" 的头发是"+color);
+        this.showColor();
+        super.showHair();
     }
 }

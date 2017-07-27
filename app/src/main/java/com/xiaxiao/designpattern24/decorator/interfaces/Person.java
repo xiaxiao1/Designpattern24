@@ -6,11 +6,18 @@ package com.xiaxiao.designpattern24.decorator.interfaces;
 
 public  abstract class Person {
     public String name;
-    public void showHair(){}
+
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+    public abstract void showHair();
 
     public void printMes(String mes) {
         System.out.println(mes);
-
     }
 
 }
