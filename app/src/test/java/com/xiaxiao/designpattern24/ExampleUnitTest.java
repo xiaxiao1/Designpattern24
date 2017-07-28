@@ -18,6 +18,13 @@ import com.xiaxiao.designpattern24.builder.interfaces.CarBuilder;
 import com.xiaxiao.designpattern24.builder.interfaces.CarModel;
 import com.xiaxiao.designpattern24.builder.Director;
 import com.xiaxiao.designpattern24.builder.KartCarBuilder;
+import com.xiaxiao.designpattern24.chain_of_responsibility.AbsHandler;
+import com.xiaxiao.designpattern24.chain_of_responsibility.Father;
+import com.xiaxiao.designpattern24.chain_of_responsibility.Husband;
+import com.xiaxiao.designpattern24.chain_of_responsibility.IHandler;
+import com.xiaxiao.designpattern24.chain_of_responsibility.IRequest;
+import com.xiaxiao.designpattern24.chain_of_responsibility.Son;
+import com.xiaxiao.designpattern24.chain_of_responsibility.WomanRequset;
 import com.xiaxiao.designpattern24.command.Invoker;
 import com.xiaxiao.designpattern24.command.bean.ProjectManager;
 import com.xiaxiao.designpattern24.command.bean.Staff;
@@ -97,7 +104,8 @@ public class ExampleUnitTest {
 //        BridgeTest();
 //        CommandTest();
 //        CompositeTest();
-        ObserverTest();
+//        ObserverTest();
+        ChianOfResponsibilityTest();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
         test.Ha();*/
     }
@@ -434,6 +442,20 @@ public class ExampleUnitTest {
         dabao.chat();
         dabao.funWithgirl();
         dabao.sleep();
+    }
+
+    public void ChianOfResponsibilityTest() {
+        WomanRequset woman = new WomanRequset(AbsHandler.HANDLE_LEVEL_SON, "我是母亲");
+        Father father = new Father();
+        Husband husband = new Husband();
+        Son son = new Son();
+        father.setNext(husband);
+        husband.setNext(son);
+        son.setNext(null);
+        woman.postRequest(father);
+        DPUtil.splitLine();
+        WomanRequset woman2 = new WomanRequset(AbsHandler.HANDLE_LEVEL_HUSBAND, "我是妻子");
+        woman2.postRequest(father);
     }
 
 
