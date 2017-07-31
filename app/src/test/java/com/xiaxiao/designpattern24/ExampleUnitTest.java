@@ -70,6 +70,9 @@ import com.xiaxiao.designpattern24.templatemethod.AbstractCar;
 import com.xiaxiao.designpattern24.templatemethod.Benz;
 import com.xiaxiao.designpattern24.templatemethod.Hummer;
 import com.xiaxiao.designpattern24.util.DPUtil;
+import com.xiaxiao.designpattern24.visitor.StudentData;
+import com.xiaxiao.designpattern24.visitor.StudentMasterVisitor;
+import com.xiaxiao.designpattern24.visitor.StudentVisitor;
 
 import org.junit.Test;
 
@@ -105,8 +108,10 @@ public class ExampleUnitTest {
 //        CommandTest();
 //        CompositeTest();
 //        ObserverTest();
-        ChianOfResponsibilityTest();
+//        ChianOfResponsibilityTest();
+        VisitorTest();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
+
         test.Ha();*/
     }
 
@@ -458,6 +463,19 @@ public class ExampleUnitTest {
         woman2.postRequest(father);
     }
 
+    public void VisitorTest() {
+        StudentData s = new StudentData("xiaxiao", "12222222222", 24);
+        StudentVisitor studentVisitor = new StudentVisitor();
+        s.accept(studentVisitor);
+        DPUtil.splitLine();
+
+        StudentMasterVisitor studentMasterVisitor = new StudentMasterVisitor();
+        s.accept(studentMasterVisitor);
+
+        /*
+        * 一个疑问，为什么不直接使用studentVisitor.visit(studentdata)呢
+        * */
+    }
 
 
 
