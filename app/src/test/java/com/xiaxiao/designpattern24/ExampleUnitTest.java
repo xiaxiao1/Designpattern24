@@ -50,6 +50,7 @@ import com.xiaxiao.designpattern24.iterator.interfaces.IProject;
 import com.xiaxiao.designpattern24.iterator.interfaces.IProjectIterator;
 import com.xiaxiao.designpattern24.observer.BF;
 import com.xiaxiao.designpattern24.observer.GF;
+import com.xiaxiao.designpattern24.prototype.PrototypeDog;
 import com.xiaxiao.designpattern24.proxy.dynamic.LoginHandler;
 import com.xiaxiao.designpattern24.proxy.dynamic.UserManager;
 import com.xiaxiao.designpattern24.proxy.dynamic.UserManagerImpl;
@@ -61,6 +62,8 @@ import com.xiaxiao.designpattern24.proxy.normal.GamePlayerProxy;
 import com.xiaxiao.designpattern24.proxy.normal.IGamePlayer;
 import com.xiaxiao.designpattern24.singleton.ExtendSingleTon;
 import com.xiaxiao.designpattern24.singleton.SingleTon1;
+import com.xiaxiao.designpattern24.state.LiftContext;
+import com.xiaxiao.designpattern24.state.StopState;
 import com.xiaxiao.designpattern24.strategy.HumorStrategy;
 import com.xiaxiao.designpattern24.strategy.LoveContext;
 import com.xiaxiao.designpattern24.strategy.MoneyStrategy;
@@ -109,7 +112,9 @@ public class ExampleUnitTest {
 //        CompositeTest();
 //        ObserverTest();
 //        ChianOfResponsibilityTest();
-        VisitorTest();
+//        VisitorTest();
+//        StateTest();
+        PrototypeTest();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
 
         test.Ha();*/
@@ -477,6 +482,41 @@ public class ExampleUnitTest {
         * */
     }
 
+    public void StateTest() {
+
+        /*
+        LiftContext和LiftState是互相关联的
+        */
+        LiftContext liftContext = new LiftContext();
+        liftContext.setLiftState(new StopState());
+        liftContext.stop();
+//        liftContext.run();
+        liftContext.close();
+        liftContext.open();
+        liftContext.run();
+        liftContext.open();
+        liftContext.close();
+        liftContext.run();
+        liftContext.close();
+        liftContext.open();
+    }
+
+    public void PrototypeTest() {
+        PrototypeDog dog1 = new PrototypeDog();
+        dog1.setName("狗狗小花");
+        dog1.setOwner("主人笑笑");
+        dog1.setAge(9);
+        dog1.printInfo();
+        DPUtil.splitLine();
+        PrototypeDog dog2 = dog1.clone();
+        DPUtil.print("the clone dog info:");
+        dog2.setName("新的狗狗大黄");
+        dog2.setAge(4);
+        dog2.printInfo();
+        DPUtil.print("狗狗小花的 info:");
+        dog1.printInfo();
+
+    }
 
 
 
