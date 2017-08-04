@@ -45,9 +45,18 @@ import com.xiaxiao.designpattern24.factorymethod.Human;
 import com.xiaxiao.designpattern24.factorymethod.HumanFactory;
 import com.xiaxiao.designpattern24.factorymethod.WhiteHuman;
 import com.xiaxiao.designpattern24.factorymethod.YelloHuman;
+import com.xiaxiao.designpattern24.flyweight.SignInfo;
+import com.xiaxiao.designpattern24.flyweight.SignInfoFactory;
 import com.xiaxiao.designpattern24.iterator.Project;
 import com.xiaxiao.designpattern24.iterator.interfaces.IProject;
 import com.xiaxiao.designpattern24.iterator.interfaces.IProjectIterator;
+import com.xiaxiao.designpattern24.mediator.Colleague1;
+import com.xiaxiao.designpattern24.mediator.Colleague2;
+import com.xiaxiao.designpattern24.mediator.Colleague3;
+import com.xiaxiao.designpattern24.mediator.Mediator;
+import com.xiaxiao.designpattern24.memento.newtype.NewWife;
+import com.xiaxiao.designpattern24.memento.oldtype.CareTacker;
+import com.xiaxiao.designpattern24.memento.oldtype.Wife;
 import com.xiaxiao.designpattern24.observer.BF;
 import com.xiaxiao.designpattern24.observer.GF;
 import com.xiaxiao.designpattern24.prototype.PrototypeDog;
@@ -114,7 +123,11 @@ public class ExampleUnitTest {
 //        ChianOfResponsibilityTest();
 //        VisitorTest();
 //        StateTest();
-        PrototypeTest();
+//        PrototypeTest();
+//        MediatorTest();
+//        FlyweightTest();
+//        MementoTest_oldtype();
+        MementoTest_newtype();
        /* com.xiaxiao.designpattern24.facade.Test test = new com.xiaxiao.designpattern24.facade.Test();
 
         test.Ha();*/
@@ -515,6 +528,76 @@ public class ExampleUnitTest {
         dog2.printInfo();
         DPUtil.print("狗狗小花的 info:");
         dog1.printInfo();
+
+    }
+
+
+    /*
+    * 模式理解了，，例子做不出来，，下面这个test废了
+    * */
+    public void MediatorTest() {
+        Mediator mediator = new Mediator();
+        Colleague1 colleague1 = new Colleague1(mediator);
+        Colleague2 colleague2 = new Colleague2(mediator);
+        Colleague3 colleague3 = new Colleague3(mediator);
+
+        colleague1.selfWork();
+        DPUtil.splitLine();
+        colleague1.toghterWork();
+    }
+
+    public void FlyweightTest() {
+        /*
+        * 初始化：
+        * 可以利用获取的原理，通过获取的方式来初始化空池
+        * */
+        for (int i=0; i<10;i++) {
+            SignInfoFactory.getSiginInfo("xiaxiao" + i);
+        }
+
+        SignInfo s = SignInfoFactory.getSiginInfo("xiaxiao6");
+        DPUtil.print("以上这个s就是复用的");
+    }
+
+    public void MementoTest_oldtype() {
+        Wife wife = new Wife();
+        CareTacker careTacker = new CareTacker();
+        wife.setMood("心情很高兴");
+        careTacker.setMemento(wife.getMemento());
+        DPUtil.print(wife.getMood());
+        DPUtil.splitLine();
+        DPUtil.print("不给老婆钱花了。。");
+        wife.setMood("没有钱花，老婆心情很不好  怒了！");
+        DPUtil.print(wife.getMood());
+        DPUtil.splitLine();
+        DPUtil.print("吓死宝宝了，赶紧给多多的钱,心情恢复");
+        wife.setMood(careTacker.getMemento().getMood());
+        DPUtil.print("现在的心情是："+wife.getMood());
+
+    }
+
+    public void MementoTest_newtype() {
+        NewWife newWife = new NewWife();
+        newWife.setMood("心情很好哦");
+        DPUtil.print("保存好心情的备份");
+        newWife.createMemento();
+
+        /*
+        * 看，我们可以得到memento对象，但是想对他操作，缺无能为力
+        * 这种情况可以用在有CareTacker的情况下，只能对memento进行调用，无法修改
+        * */
+        NewWife.IMemento b=newWife.getMemento();
+
+        DPUtil.splitLine();
+        DPUtil.print("改变心情：心情很糟了");
+        newWife.setMood("心情很糟了");
+
+        DPUtil.print("现在的心情是："+newWife.getMood());
+        DPUtil.splitLine();
+        DPUtil.print("恢复心情：");
+        newWife.restoreMemento();
+        DPUtil.print("恢复后的心情是："+newWife.getMood());
+
 
     }
 
